@@ -1,0 +1,139 @@
+#include <iostream>
+#include <structs.cpp>
+#include <windows.h>
+
+using namespace std;
+
+void inicializarLista (punteroP *pP){
+    pP->cab = NULL;
+    pP->contador = 0;
+}
+
+void inicializarNodo (nodoQ *nodo){
+    nodo->sgt = NULL;
+    nodo->descrip = new info;
+}
+
+void leerNodo (nodoQ *nodo){
+    cout<<"Introduce correo"<<endl;
+    cin>>nodo->descrip->correo;
+    cout<<"Introduce edad"<<endl;
+    cin>>nodo->descrip->edad;
+    cout<<"Introduce nombre"<<endl;
+    cin>>nodo->descrip->nombre;
+}
+
+void insertarNodo (nodoQ *nodo, punteroP *pP){
+    nodoQ *T = new nodoQ;
+    T->sgt = NULL;
+    if (pP->cab == NULL){
+        pP->cab = nodo;
+    }else {
+        T = pP->cab;
+        while (T->sgt != NULL){
+            T = T->sgt;
+        }
+        T->sgt = nodo;
+    }
+    pP->contador++;
+}
+
+void colocarNodo (punteroP *pP){
+    nodoQ *nodo = new nodoQ;
+    inicializarNodo (nodo);
+    leerNodo (nodo);
+    insertarNodo (nodo, pP);
+}
+
+nodoQ *buscarNodo (string nodo, punteroP *pP){
+    nodoQ *T = new nodoQ;
+    T = pP->cab;
+    do{
+        if(nodo == T->descrip->nombre){
+            return T;
+        }else{
+            T = T->sgt;
+        }
+    }while (T != NULL);
+    return NULL;
+}
+
+void insertarNodoAntes (nodoQ *nodo, punteroP *pP){
+    system ("cls");
+    nodoQ *T = new nodoQ;
+    nodoQ *Q = new nodoQ;
+    T = pP->cab;
+    string nombre;
+    cout<<"Ingrese nombre de nodo para buscar"<<endl;
+    cin >> nombre;
+    Q = buscarNodo(nombre, pP);
+    if (Q == NULL){
+        cout<<"nodo no encontrado"<<endl;
+        Sleep (3000);
+        return;
+    }
+    if (pP->cab == Q){
+        nodo->sgt = Q;
+        pP->cab = nodo;
+    }else {
+        while(T->sgt != Q){
+            T = T->sgt;
+        }
+        nodo->sgt = Q;
+        T->sgt = nodo;
+    }
+    pP->contador++;
+    cout<<"Nodo agregado"<<endl;
+    Sleep (3000);
+}
+
+void colocarNodoAntes (punteroP *pP){
+    nodoQ *nodo = new nodoQ;
+    inicializarNodo (nodo);
+    leerNodo (nodo);
+    insertarNodoAntes (nodo, pP);
+}
+
+void insertarNodoDespues (nodoQ *nodo, punteroP *pP){
+    system("cls");
+    nodoQ *Q = new nodoQ;
+    string nombre;
+    cout<<"Ingrese nombre de nodo para buscar"<<endl;
+    cin >> nombre;
+    Q = buscarNodo(nombre, pP);
+    if (Q == NULL){
+        cout<<"nodo no encontrado"<<endl;
+        Sleep (3000);
+        return;
+    }
+    nodo->sgt = Q->sgt;
+    Q->sgt = nodo;
+    cout<<"nodo agregado"<<endl;
+}
+
+void colocarNodoDespues(punteroP *pP){
+    nodoQ *nodo = new nodoQ;
+    inicializarNodo (nodo);
+    leerNodo (nodo);
+    insertarNodoDespues (nodo, pP);
+}
+
+int main()
+{
+    punteroP *pP = new punteroP;
+    int num;
+    inicializarLista (pP);
+    do{
+        cout<<"Ingrese 1 para avnzar, 2 agregar nodo antes"<<endl<<
+           "3 agregar nodo despues, 4 salir"<<endl;
+        cin>>num;
+        switch(num){
+        case 1: colocarNodo (pP); break;
+        case 2: colocarNodoAntes (pP); break;
+        case 3: colocarNodoDespues (pP); break;
+        }
+        system ("cls");
+    }while(num != 4);
+    return 0;
+}
+
