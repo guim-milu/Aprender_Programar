@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+struct info {
+    string nombre;
+    string edad;
+    string correo;
+};
+
+struct nodoQ {
+    nodoQ *sgt;
+    info *descrip;
+};
+
+struct punteroP {
+    nodoQ *cab;
+    int contador;
+};
